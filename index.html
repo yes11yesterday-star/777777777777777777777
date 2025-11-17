@@ -1968,11 +1968,8 @@ async function selectCountry(country) {
   
 
 
-
-// 🟦 اجعل الترحيب يظهر للجميع حتى لو غير مسجل
-const welcomeKey = `welcome_general_${country.name}`;
-const isFirstTime = !localStorage.getItem(welcomeKey);
-
+const welcomeKey = currentUser ? `welcome_${currentUser.id}_${country.name}` : null;
+const isFirstTime = welcomeKey && !localStorage.getItem(welcomeKey);
 
 
 
