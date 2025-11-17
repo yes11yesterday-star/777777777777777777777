@@ -1458,9 +1458,7 @@
         // For production: 'https://your-backend-domain.com'
 
 
-
-
-        const API_BASE_URL = window.location.origin;
+        const API_BASE_URL = "https://222222222-production-8076.up.railway.app";
 
 
 
@@ -1967,9 +1965,17 @@ async function selectCountry(country) {
   if (flagEl) flagEl.textContent = country.flag || '🌍';
   if (nameEl) nameEl.textContent = country.name || '';
 
-  // ====== مفتاح الترحيب الفريد لكل مستخدم + دولة ======
-  const welcomeKey = currentUser ? `welcome_${currentUser.id}_${country.name}` : null;
-  const isFirstTime = welcomeKey && !localStorage.getItem(welcomeKey);
+  
+
+
+
+// 🟦 اجعل الترحيب يظهر للجميع حتى لو غير مسجل
+const welcomeKey = `welcome_general_${country.name}`;
+const isFirstTime = !localStorage.getItem(welcomeKey);
+
+
+
+
 
   if (isFirstTime) {
     // أول مرة يفتح هذه الدولة → رسالة ترحيب فقط
