@@ -18,9 +18,11 @@ app.use(express.json({ limit: "10mb" }));
 // ===============================================
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-if (!GEMINI_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE) {
+
+if (!GEMINI_API_KEY || !SUPABASE_URL || !SUPABASE_ANON_KEY) {
+
   console.error("❌ ملف .env ناقص");
   process.exit(1);
 }
@@ -28,7 +30,8 @@ if (!GEMINI_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE) {
 // ===============================================
 // 🔗 Supabase
 // ===============================================
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 // ===============================================
 // 🧩 شخصية خبير الهجرة
