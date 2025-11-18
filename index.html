@@ -1017,8 +1017,20 @@
             <button onclick="sendToWhatsapp()" class="w-full bg-green-600 hover:bg-green-700 transition text-white py-3 rounded-xl">
                 إرسال لقطة الدفع إلى واتساب 💬
             </button>
+
+
+<p class="text-center text-green-400 text-xl font-bold mt-4">
+    رقم الواتساب: 
+    <span style="direction: ltr; unicode-bidi: isolate; display: inline-block;">
+        +1 (647) 367-6233
+    </span>
+</p>
+
+         
         </div>
 
+
+    
         <!-- ملاحظات مهمة -->
         <div class="bg-[#162238] rounded-2xl p-4 border border-[#2b3d55] mb-6">
             <h3 class="text-lg font-bold text-yellow-400 mb-2">⚠ ملاحظات مهمة</h3>
@@ -1105,10 +1117,31 @@
             </p>
         </div>
 
-        <!-- زر إرسال إلى واتساب -->
-        <button onclick="sendToWhatsapp()" class="w-full bg-green-600 hover:bg-green-700 transition text-white py-3 rounded-xl mb-4 font-bold">
-            إرسال لقطة الدفع إلى واتساب 💬
-        </button>
+
+
+
+
+
+
+<button onclick="window.open('https://wa.me/16473676233', '_blank')" 
+        class="w-full bg-green-600 hover:bg-green-700 transition text-white py-3 rounded-xl mb-4 font-bold">
+    💬 إرسال لقطة الدفع إلى واتساب
+</button>
+
+
+
+
+
+<p class="text-center text-green-400 text-xl font-bold mt-4 mb-6">
+    رقم الواتساب: 
+    <span style="direction: ltr; unicode-bidi: isolate; display: inline-block; font-family: 'Inter', 'Arial', sans-serif;">
+        +1 (647) 367-6233
+    </span>
+</p>
+
+
+
+
 
         <!-- زر العودة -->
         <button onclick="showPage('subscription')" class="w-full bg-gray-500 hover:bg-gray-600 transition text-white py-3 rounded-xl font-bold">
@@ -1458,7 +1491,7 @@
         // For production: 'https://your-backend-domain.com'
 
 
-        const API_BASE_URL = "https://777777777777777777777-production.up.railway.app";
+        const API_BASE_URL = 'https://777777777777777777777-production.up.railway.app';
 
 
 
@@ -2578,6 +2611,22 @@ function showPage(pageName) {
                 updateAuthUI();
             });
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     </script>
 
