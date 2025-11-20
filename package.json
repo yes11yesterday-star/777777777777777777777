@@ -1,18 +1,11 @@
 {
   "name": "immigration-expert-chat",
   "version": "1.0.0",
-  "description": "AI Immigration Expert Chat Backend (Gemini + Supabase)",
   "main": "server.js",
-
   "scripts": {
-    "start": "npm install --omit=dev && node server.js",
-    "dev": "NODE_ENV=development node server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
-
-  "engines": {
-    "node": ">=18.0.0"
-  },
-
   "dependencies": {
     "@supabase/supabase-js": "^2.81.1",
     "axios": "^1.13.2",
