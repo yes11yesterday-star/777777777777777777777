@@ -169,25 +169,30 @@ app.get("/api/subscription", async (req, res) => {
 
 
 
-
+// ===============================================
+// 💬 Chat API — محادثة Gemini
+// ===============================================
 app.post("/api/chat", async (req, res) => {
   try {
-    const { message, userId, conversationId, country } = req.body;
+    const { message, userId, country, conversationId } = req.body;
+
+// ⛔ منع غير المشترك من استخدام الدردشة
+const subscribed = await userHasActiveSubscription(userId);
+if (!subscribed) {
+  return res.status(403).json({
+    error: "يجب الاشتراك لاستخدام الدردشة",
+    requiresSubscription: true
+  });
+}
+
+
+
 
     if (!message || !userId || !conversationId) {
       return res.status(400).json({ error: "القيم ناقصة" });
     }
 
-    // التحقق من الاشتراك
-    const subscribed = await userHasActiveSubscription(userId);
-    if (!subscribed) {
-      return res.status(403).json({
-        error: "يجب الاشتراك لاستخدام الدردشة",
-        requiresSubscription: true
-      });
-    }
-
-    // قراءة 25 رسالة سابقة
+    // جلب آخر 25 رسالة للمحادثة
     const { data: history } = await supabase
       .from("chat_history")
       .select("role, message")
@@ -196,25 +201,24 @@ app.post("/api/chat", async (req, res) => {
       .order("created_at", { ascending: true })
       .limit(25);
 
-    // إعادة بناء الـ history بشكل صحيح
-    const structuredHistory = history.map(h => ({
-      role: h.role === "assistant" ? "model" : "user",
-      parts: [{ text: h.message }]
-    }));
+    const formattedHistory = history
+      ?.map((m) => `${m.role}: ${m.message}`)
+      .join("\n") || "";
 
-    // بناء الرسالة النهائية
-    const payload = {
-      contents: [
-        { role: "system", parts: [{ text: systemPrompt }] },
-        ...structuredHistory,
-        { role: "user", parts: [{ text: message }] }
-      ]
-    };
+    const fullPrompt = `
+${systemPrompt}
+
+الرسائل السابقة:
+${formattedHistory}
+
+رسالة المستخدم:
+${message}
+`;
 
     // إرسال الطلب إلى Gemini
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      payload,
+      { contents: [{ role: "user", parts: [{ text: fullPrompt }] }] },
       { headers: { "Content-Type": "application/json" } }
     );
 
@@ -222,7 +226,7 @@ app.post("/api/chat", async (req, res) => {
       response.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "⚠️ حدث خطأ أثناء الاتصال بـ Gemini.";
 
-    // حفظ الرسالة والرد
+    // حفظ الرسالة وردّ الذكاء
     await supabase.from("chat_history").insert([
       {
         user_id: userId,
@@ -241,13 +245,12 @@ app.post("/api/chat", async (req, res) => {
     ]);
 
     res.json({ response: reply });
+
   } catch (err) {
     console.error("Chat Error:", err.message);
     res.status(500).json({ error: "خطأ في الاتصال بـ Gemini" });
   }
 });
-
-
 
 
 
@@ -311,6 +314,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ السيرفر يعمل: http://localhost:${PORT}`);
 });
+
 
 
 
